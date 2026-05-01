@@ -43,5 +43,24 @@ class HewanRepository {
     }
   }
 
+  Future<void> updateHewan(int id, Map<String, dynamic> hewanData) async {
+    final token = await storage.getToken();
+
+    final response = await http.put(
+      Uri.parse('$baseUrl/hewan/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(hewanData),
+    );
+
+    if (response.statusCode != 200) {
+      final data = jsonDecode(response.body);
+      throw data['message'] ?? 'Gagal memperbarui data hewan';
+    }
+  }
+
   
 }
