@@ -20,5 +20,31 @@ class AuthRepository {
     await _storage.delete(key: 'jwt_token');
   }
 
+  Future<UserModel> login(String email, String password) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/auth/login'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({'email': email, 'password': password}),
+      );
+
+      final data = jsonDecode(response.body);
+      developer.log('Response Login: ${response.body}', name: 'API');
+
+      if (response.statusCode == 200) {
+        await persistToken(data['token']);
+        return UserModel.fromJson(data['user']);
+      } else {
+        throw data['message'] ?? 'Gagal Login';
+      }
+    } catch (e) {
+      developer.log('Error pada Login: $e', name: 'API');
+      rethrow;
+    }
+  }
+
   
 }
