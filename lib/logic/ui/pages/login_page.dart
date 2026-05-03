@@ -71,13 +71,15 @@ class _LoginPageState extends State<LoginPage> {
             child: Center(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 90,
-                  vertical: 15,
+                  horizontal: 24,
+                  vertical: 20,
                 ),
                 child: ClipRRect(
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                     child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.1),
                         border: Border.all(color: Colors.white30),
@@ -95,6 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                         key: _formKey,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center, 
                           children: [
                             const Text(
                               'Selamat Datang',
@@ -104,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            _buildSizedBox(height: 40),
+                            _buildSizedBox(height: 20),
                             _buildEmailTextField(
                               hint: 'Email',
                               icon: Icons.email_outlined,
@@ -120,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                                 return null;
                               },
                             ),
-                            _buildSizedBox(height: 40),
+                            _buildSizedBox(height: 16),
                             _buildPasswordTextField(
                               controller: _passwordController,
                               isObscure: _isObscure,
@@ -134,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                                 return null;
                               },
                             ),
-                            _buildSizedBox(height: 40),
+                            _buildSizedBox(height: 20),
                             if (state is AuthLoading)
                               const CircularProgressIndicator(
                                 valueColor: AlwaysStoppedAnimation<Color>(
@@ -172,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                               ),
-                            _buildSizedBox(height: 40),
+                            _buildSizedBox(height: 10),
                             TextButton(
                               onPressed: () {
                                 Navigator.pushAndRemoveUntil(
