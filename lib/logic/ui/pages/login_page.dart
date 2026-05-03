@@ -5,6 +5,7 @@ import 'package:rest_api/logic/bloc/auth/auth_event.dart';
 import 'package:rest_api/logic/bloc/auth/auth_bloc.dart';
 import 'package:rest_api/logic/bloc/auth/auth_bloc.dart';
 import 'package:rest_api/logic/bloc/auth/auth_state.dart';
+import 'package:rest_api/logic/ui/pages/register_page.dart';
 import 'dashboard_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -174,7 +175,13 @@ class _LoginPageState extends State<LoginPage> {
                             _buildSizedBox(height: 40),
                             TextButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, '/register');
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const RegisterPage(),
+                                  ),
+                                  (route) => false,
+                                );
                               },
                               child: RichText(
                                 text: TextSpan(
