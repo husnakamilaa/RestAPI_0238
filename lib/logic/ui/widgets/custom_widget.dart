@@ -99,7 +99,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 : null,
             suffixIconConstraints: const BoxConstraints(minWidth: 0),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: Colors.white.withOpacity(0.08),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
               borderSide: BorderSide.none,
