@@ -22,5 +22,18 @@ class _EditHewanPageState extends State<EditHewanPage> {
   late TextEditingController _hargaController;
   late TextEditingController _tanggalController;
 
+  @override
+  void initState() {
+    super.initState();
+
+    _namaController = TextEditingController(text: widget.hewan.nama);
+    _jenisController = TextEditingController(text: widget.hewan.jenis);
+    _statusController = TextEditingController(text: widget.hewan.status);
+    _hargaController = TextEditingController(
+      text: widget.hewan.harga.toString(),
+    );
+    _tanggalController = TextEditingController(text: widget.hewan.tanggalLahir);
+  }
+
   
 }
