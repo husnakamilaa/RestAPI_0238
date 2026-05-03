@@ -58,7 +58,14 @@ class _EditHewanPageState extends State<EditHewanPage> {
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF1A237E), Color(0xFF4FC3F7)],
+          ),
+        ),
+        child: Center(child: _buildForm(context)),
+      ),
     );
   }
 
