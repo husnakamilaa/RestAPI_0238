@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rest_api/logic/bloc/auth/auth_bloc.dart';
 import 'package:rest_api/logic/bloc/auth/auth_event.dart';
 import 'package:rest_api/data/repositories/auth_repository.dart';
+import 'package:rest_api/logic/ui/pages/dashboard_page.dart';
 import 'package:rest_api/logic/ui/pages/login_page.dart';
+import 'package:rest_api/logic/ui/pages/register_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,14 +20,20 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (_) => AuthBloc(
         repository: AuthRepository(),
-      ), //..add(CheckAuthStatus()),
+      )..add(AppStarted()), 
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: true,
           colorSchemeSeed: Colors.indigo,
         ),
-        home: const LoginPage(),
+
+        initialRoute: '/login',
+        routes: {
+          '/login': (context) => const LoginPage(),
+          '/register': (context) => const RegisterPage(),
+          '/dashboard': (context) => const DashboardPage(),
+        },
       ),
     );
   }
