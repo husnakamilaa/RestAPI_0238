@@ -5,6 +5,7 @@ import 'package:rest_api/logic/bloc/auth/auth_event.dart';
 import 'package:rest_api/logic/bloc/auth/auth_bloc.dart';
 import 'package:rest_api/logic/bloc/auth/auth_bloc.dart';
 import 'package:rest_api/logic/bloc/auth/auth_state.dart';
+import 'package:rest_api/logic/ui/pages/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -85,13 +86,15 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Center(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 90,
-                  vertical: 15,
+                  horizontal: 24,
+                  vertical: 20,
                 ),
                 child: ClipRRect(
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                     child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.1),
                         border: Border.all(color: Colors.white30),
@@ -199,9 +202,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                 );
                               },
                             ),
-                            _buildSizedBox(height: 20),
+                            _buildSizedBox(height: 10),
                             TextButton(
-                              onPressed: ()  {Navigator.pushReplacementNamed(context, '/login');},
+                              onPressed: ()  {Navigator.pushReplacement(
+                                context, 
+                                MaterialPageRoute(builder: (_) => const LoginPage()),
+                                );
+                                },
                               child: const Text(
                                 'Sudah punya akun? Login',
                                 style: TextStyle(color: Colors.white),
