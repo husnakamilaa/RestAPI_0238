@@ -190,7 +190,10 @@ class DashboardPage extends StatelessWidget {
                 );
               },
             ),
-            
+            IconButton(
+              icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+              onPressed: () => _showDeleteDialog(context, hewan),
+            ),
           ],
         ),
       ),
