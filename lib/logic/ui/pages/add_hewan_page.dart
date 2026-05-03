@@ -20,5 +20,15 @@ class _AddHewanPageState extends State<AddHewanPage> {
   final _tanggalController = TextEditingController();
   final _hargaController = TextEditingController();
 
+  @override
+  void dispose() {
+    _namaController.dispose();
+    _jenisController.dispose();
+    _statusController.dispose();
+    _hargaController.dispose();
+    _tanggalController.dispose();
+    super.dispose();
+  }
+
   
 }
