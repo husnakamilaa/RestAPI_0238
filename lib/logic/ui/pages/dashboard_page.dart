@@ -173,9 +173,25 @@ class DashboardPage extends StatelessWidget {
           '${hewan.jenis} • ${hewan.status}',
           style: const TextStyle(color: Colors.white70),
         ),
-        trailing: IconButton(
-          icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
-          onPressed: () => _showDeleteDialog(context, hewan),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.edit, color: Colors.blueAccent),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider.value(
+                      value: context.read<HewanBloc>(),
+                      child: EditHewanPage(hewan: hewan),
+                    ),
+                  ),
+                );
+              },
+            ),
+            
+          ],
         ),
       ),
     );
