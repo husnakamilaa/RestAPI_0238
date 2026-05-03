@@ -148,6 +148,26 @@ class _AddHewanPageState extends State<AddHewanPage> {
       ),
     );
   }
-
-  
+  Widget _buildField(
+    TextEditingController controller,
+    String hint, {
+    IconData? icon,
+    TextInputType? keyboardType,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      validator: (value) =>
+          value == null || value.isEmpty ? "$hint tidak boleh kosong" : null,
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: const TextStyle(color: Colors.white54),
+        prefixIcon: icon != null ? Icon(icon, color: Colors.white70) : null,
+        filled: true,
+        fillColor: Colors.white.withOpacity(0.1),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+      style: const TextStyle(color: Colors.white),
+    );
+  }
 }
