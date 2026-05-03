@@ -73,7 +73,72 @@ class _AddHewanPageState extends State<AddHewanPage> {
                   const SizedBox(height: 12),
                   _buildField(_jenisController, "Jenis", icon: Icons.category),
                   const SizedBox(height: 12),
-                 
+                  TextFormField(
+                    controller: _tanggalController,
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      hintText: "Tanggal Lahir",
+                      hintStyle: const TextStyle(color: Colors.white54),
+                      prefixIcon: const Icon(
+                        Icons.calendar_today,
+                        color: Colors.white70,
+                      ),
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.1),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    style: const TextStyle(color: Colors.white),
+                    validator: (value) => value == null || value.isEmpty
+                        ? "Tanggal tidak boleh kosong"
+                        : null,
+                    onTap: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime.now(),
+                      );
+
+                      if (pickedDate != null) {
+                        String formatted =
+                            "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+
+                        setState(() {
+                          _tanggalController.text = formatted;
+                        });
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  _buildField(
+                    _hargaController,
+                    "Harga",
+                    icon: Icons.attach_money,
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(height: 12),
+                  _buildField(_statusController, "Status", icon: Icons.info),
+                  const SizedBox(height: 20),
+
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<HewanBloc>().add(
+                          CreateHewan({
+                            "nama": _namaController.text,
+                            "jenis": _jenisController.text,
+                            "tanggal_lahir": _tanggalController.text,
+                            "harga": int.parse(_hargaController.text),
+                            "status": _statusController.text,
+                          }),
+                        );
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: const Text("Tambah"),
+                  ),
                 ],
               ),
             ),
