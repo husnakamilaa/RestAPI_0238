@@ -2,12 +2,17 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:rest_api/logic/bloc/auth/auth_bloc.dart';
 import 'package:rest_api/logic/bloc/auth/auth_event.dart';
+import 'package:rest_api/logic/bloc/auth/auth_state.dart';
 import 'package:rest_api/logic/bloc/hewan/hewan_bloc.dart';
 import 'package:rest_api/logic/bloc/hewan/hewan_event.dart';
 import 'package:rest_api/logic/bloc/hewan/hewan_state.dart';
 import 'package:rest_api/data/repositories/hewan_repository.dart';
+import 'package:rest_api/logic/ui/pages/add_hewan_page.dart';
+import 'package:rest_api/logic/ui/pages/edit_hewan_page.dart';
+import 'package:rest_api/logic/ui/pages/login_page.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -17,117 +22,137 @@ class DashboardPage extends StatelessWidget {
     return BlocProvider(
       create: (context) =>
           HewanBloc(repository: HewanRepository())..add(FetchHewan()),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Aplikasi Ternak',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+      child: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is Unauthenticated) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => const LoginPage()),
+              (route) => false,
+            );
+          }
+        },
+        child: Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            title: const Text(
+              'Koleksi Ternak',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            actions: [
+              IconButton(
+                onPressed: () =>
+                    context.read<AuthBloc>().add(LogoutRequested()),
+                icon: const Icon(Icons.logout, color: Colors.white),
+                tooltip: 'Logout',
+              ),
+            ],
           ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: [
-            IconButton(
-              onPressed: () => context.read<AuthBloc>().add(LogoutRequested()),
-              icon: const Icon(Icons.logout, color: Colors.white),
-              tooltip: 'Logout',
-            ),
-          ],
-        ),
-        body: Stack(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color(0xFF1A237E), Color(0xFF4FC3F7)],
-                ),
-              ),
-            ),
-            BlocListener<HewanBloc, HewanState>(
-              listener: (context, state) {
-                if (state is HewanCreatedSuccess) {
-                  _showSnackBar(context, 'Operasi Berhasil!', Colors.green);
-                } else if (state is HewanError) {
-                  _showSnackBar(context, state.message, Colors.red);
-                }
-              },
-              child: BlocBuilder<HewanBloc, HewanState>(
-                builder: (context, state) {
-                  if (state is HewanLoading) {
-                    return Center(
-                      child: Image.asset('assets/loading.json', width: 200),
-                    );
-                  } else if (state is HewanError) {
-                    return Center(
-                      child: const Text(
-                        'Belum ada coloasi.',
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                    );
-                  }
-
-                  return CustomRefreshIndicator(
-                    onRefresh: () async {
-                      context.read<HewanBloc>().add(FetchHewan());
-                      await Future.delayed(const Duration(seconds: 2));
-                    },
-                    builder: (context, child, controller) {
-                      return AnimatedBuilder(
-                        animation: controller,
-                        builder: (context, _) {
-                          return Stack(
-                            alignment: Alignment.topCenter,
-                            children: [
-                              if (controller.state == IndicatorState.loading)
-                                Positioned(
-                                  top: 50 * controller.value,
-                                  child: Image.asset(
-                                    'assets/loading.json',
-                                    height: 80,
-                                  ),
-                                ),
-                              Transform.translate(
-                                offset: Offset(0, 100 * controller.value),
-                                child: child,
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: ListView.builder(
-                      itemCount: state is HewanLoaded
-                          ? (state as HewanLoaded).hewanList.length
-                          : 0,
-                      itemBuilder: (context, index) {
-                        final hewan = (state as HewanLoaded).hewanList[index];
-                        return _buildHewanCard(context, hewan);
-                      },
-                    ),
-                  );
-
-                  return Center(child: Text("Gagal memuat data."));
-                },
-              ),
-            ),
-          ],
-        ),
-        floatingActionButton: Builder(
-          builder: (context) => FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BlocProvider.value(
-                    value: context.read<HewanBloc>(),
-                    child: AddHewanPage(),
+          body: Stack(
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Color(0xFF1A237E), Color(0xFF4FC3F7)],
                   ),
                 ),
+              ),
+              BlocListener<HewanBloc, HewanState>(
+                listener: (context, state) {
+                  if (state is HewanCreatedSuccess) {
+                    _showSnackBar(context, 'Operasi Berhasil!', Colors.green);
+                  } else if (state is HewanError) {
+                    _showSnackBar(context, state.message, Colors.red);
+                  }
+                },
+                child: BlocBuilder<HewanBloc, HewanState>(
+                  builder: (context, state) {
+                    if (state is HewanLoading) {
+                      return Center(
+                        child: Lottie.asset('assets/loading.json', width: 200),
+                      );
+                    } else if (state is HewanError) {
+                      return Center(
+                        child: const Text(
+                          'Belum ada coloasi.',
+                          style: TextStyle(color: Colors.white70),
+                        ),
+                      );
+                    }
+
+                    return CustomRefreshIndicator(
+                      onRefresh: () async {
+                        context.read<HewanBloc>().add(FetchHewan());
+                        await Future.delayed(const Duration(seconds: 2));
+                      },
+                      builder: (context, child, controller) {
+                        return AnimatedBuilder(
+                          animation: controller,
+                          builder: (context, _) {
+                            return Stack(
+                              alignment: Alignment.topCenter,
+                              children: [
+                                if (controller.state == IndicatorState.loading)
+                                  Positioned(
+                                    top: 50 * controller.value,
+                                    child: Image.asset(
+                                      'assets/loading.json',
+                                      height: 80,
+                                    ),
+                                  ),
+                                Transform.translate(
+                                  offset: Offset(0, 100 * controller.value),
+                                  child: child,
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: ListView.builder(
+                        itemCount: state is HewanLoaded
+                            ? (state as HewanLoaded).hewanList.length
+                            : 0,
+                        itemBuilder: (context, index) {
+                          final hewan = (state as HewanLoaded).hewanList[index];
+                          return _buildHewanCard(context, hewan);
+                        },
+                      ),
+                    );
+
+                    return Center(child: Text("Gagal memuat data."));
+                  },
+                ),
+              ),
+            ],
+          ),
+          floatingActionButton: Builder(
+            builder: (context) {
+              final hewanBloc = context.read<HewanBloc>(); // 🔥 ambil dulu
+
+              return FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: hewanBloc,
+                        child: const AddHewanPage(),
+                      ),
+                    ),
+                  );
+                },
+                backgroundColor: Colors.white.withOpacity(0.2),
+                child: const Icon(Icons.add, color: Colors.white),
               );
             },
-            backgroundColor: Colors.white.withOpacity(0.2),
-            child: const Icon(Icons.add, color: Colors.white),
           ),
         ),
       ),
@@ -179,10 +204,11 @@ class DashboardPage extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.edit, color: Colors.blueAccent),
               onPressed: () {
+                final hewanBloc = context.read<HewanBloc>();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => BlocProvider.value(
+                    builder: (_) => BlocProvider.value(
                       value: context.read<HewanBloc>(),
                       child: EditHewanPage(hewan: hewan),
                     ),
