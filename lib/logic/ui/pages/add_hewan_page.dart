@@ -66,7 +66,16 @@ class _AddHewanPageState extends State<AddHewanPage> {
             color: Colors.white.withOpacity(0.1),
             child: Form(
               key: _formKey,
-              
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildField(_namaController, "Nama", icon: Icons.pets),
+                  const SizedBox(height: 12),
+                  _buildField(_jenisController, "Jenis", icon: Icons.category),
+                  const SizedBox(height: 12),
+                 
+                ],
+              ),
             ),
           ),
         ),
