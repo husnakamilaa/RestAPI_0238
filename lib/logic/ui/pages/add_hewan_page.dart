@@ -14,5 +14,11 @@ class AddHewanPage extends StatefulWidget {
 class _AddHewanPageState extends State<AddHewanPage> {
   final _formKey = GlobalKey<FormState>();
 
+  final _namaController = TextEditingController();
+  final _jenisController = TextEditingController();
+  final _statusController = TextEditingController();
+  final _tanggalController = TextEditingController();
+  final _hargaController = TextEditingController();
+
   
 }
