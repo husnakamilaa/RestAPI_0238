@@ -138,7 +138,23 @@ class _EditHewanPageState extends State<EditHewanPage> {
                   _buildField(_statusController, "Status", icon: Icons.info),
                   const SizedBox(height: 20),
 
-                  
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<HewanBloc>().add(
+                          UpdateHewan(widget.hewan.id, {
+                            "nama": _namaController.text,
+                            "jenis": _jenisController.text,
+                            "tanggal_lahir": _tanggalController.text,
+                            "harga": int.parse(_hargaController.text),
+                            "status": _statusController.text,
+                          }),
+                        );
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: const Text("Update"),
+                  ),
                 ],
               ),
             ),
