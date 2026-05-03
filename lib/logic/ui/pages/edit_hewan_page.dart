@@ -69,5 +69,27 @@ class _EditHewanPageState extends State<EditHewanPage> {
     );
   }
 
-  
+  Widget _buildForm(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: SingleChildScrollView(
+        child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            color: Colors.white.withOpacity(0.1),
+            child: Form(
+              key: _formKey,
+              
+            ),
+          ),
+        ),
+      ),
+      ),
+    );
+  }
+
+
 }
