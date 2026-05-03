@@ -201,7 +201,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             _buildSizedBox(height: 20),
                             TextButton(
-                              onPressed: () => Navigator.pop(context),
+                              onPressed: ()  {Navigator.pushReplacementNamed(context, '/login');},
                               child: const Text(
                                 'Sudah punya akun? Login',
                                 style: TextStyle(color: Colors.white),
