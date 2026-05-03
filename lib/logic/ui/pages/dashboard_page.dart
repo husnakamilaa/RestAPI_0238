@@ -113,23 +113,23 @@ class DashboardPage extends StatelessWidget {
             ),
           ],
         ),
-        // floatingActionButton: Builder(
-        //   builder: (context) => FloatingActionButton(
-        //     onPressed: () {
-        //       Navigator.push(
-        //         context,
-        //         MaterialPageRoute(
-        //           builder: (context) => BlocProvider.value(
-        //             value: context.read<HewanBloc>(),
-        //             child: AddHewanPage(),
-        //           ),
-        //         ),
-        //       );
-        //     },
-        //     backgroundColor: Colors.white.withOpacity(0.2),
-        //     child: const Icon(Icons.add, color: Colors.white),
-        //   ),
-        // ),
+        floatingActionButton: Builder(
+          builder: (context) => FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BlocProvider.value(
+                    value: context.read<HewanBloc>(),
+                    child: AddHewanPage(),
+                  ),
+                ),
+              );
+            },
+            backgroundColor: Colors.white.withOpacity(0.2),
+            child: const Icon(Icons.add, color: Colors.white),
+          ),
+        ),
       ),
     );
   }
